@@ -33,7 +33,7 @@ def main():
         x = int(input("Enter Your Choice : "))
         match x:
             case 1:
-                Patient()
+                Patient(connection,cursor)
                 
             case 6:
                 break

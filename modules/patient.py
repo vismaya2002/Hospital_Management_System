@@ -1,9 +1,15 @@
-def InsertPatient():
+def InsertPatient(connection,cursor):
+    cursor.execute('select * from patient')
+    val = cursor.fetchall()
+    id = len(val)+101
     name = input("Enter the name of patient : \n")
     age = int(input("Enter the age of patient : \n"))
     PhnNumber = int(input("Enter the phone number of patient : \n"))
     ConsultingDepartment = input("Enter the department consulted : \n")
     ConsulitngDoctor = input("Enter the name of doctor consulting : \n")
+    cursor.execute("insert into patient values({},'{}',{},{},'{}','{}')".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
+    connection.commit()
+    print("\nPatient created successfully\n")
 
 def NameEdit(id):
     NewName = input("Enter the corrected name of patient: ")
@@ -14,6 +20,11 @@ def AgeEdit(id):
 def PhoneNumberEdit(id):
     NewNumber = int(input("Enter the corrected age of patient: "))
 
+def DeptEdit(id):
+    NewDept = input("Enter the corrected department name : ")
+
+def DocEdit(id):
+    NewDoc = input("Enter the corrected doctor name : ")
 
 def EditPatient():
     while True:
@@ -34,16 +45,18 @@ def EditPatient():
                 AgeEdit(id)
             case 3:
                 PhoneNumberEdit(id)
+            case 4:
+                DeptEdit(id)
+            case 5:
+                DocEdit(id)
             case 6:
                 break
-            case _:
+            case default:
                 print("You Entered The Wrong Choice.")
 
 
 
-                
-
-def Patient():
+def Patient(connection,cursor):
     while True:
 
         print("******* PATIENT *******")
@@ -55,7 +68,7 @@ def Patient():
         x = int(input("Enter Your Choice : "))
         match x:
             case 1:
-                InsertPatient()
+                InsertPatient(connection,cursor)
 
             case 2:
                 EditPatient()
