@@ -26,11 +26,18 @@ def DeptEdit(id):
 def DocEdit(id):
     NewDoc = input("Enter the corrected doctor name : ")
 
-def EditPatient():
+def EditPatient(connection,cursor):
     while True:
-
+        lst = []
         print("Edit The Details Of Patient...")
-        id = input("Enter the PatientId: \n")
+        id = int(input("Enter the PatientId: \n"))
+        cursor.execute('select * from patient')
+        for i in cursor:
+            lst.append(i[0])
+        print(lst)
+        if id not in lst:
+            print("enter a valid id")
+            continue
         print("1. Edit Patient Name")
         print("2. Edit Patient age")
         print("3. Edit Patient Phone Number")
@@ -71,7 +78,7 @@ def Patient(connection,cursor):
                 InsertPatient(connection,cursor)
 
             case 2:
-                EditPatient()
+                EditPatient(connection,cursor)
                 
             case 5:
                 break
