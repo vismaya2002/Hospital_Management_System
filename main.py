@@ -34,6 +34,8 @@ def main():
         match x:
             case 1:
                 Patient(connection,cursor)
+            case 2:
+                Doctor()
                 
             case 6:
                 break
