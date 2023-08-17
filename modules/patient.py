@@ -18,7 +18,7 @@ def AgeEdit(id):
     NewAge = input("Enter the corrected age of patient: ")
 
 def PhoneNumberEdit(id):
-    NewNumber = int(input("Enter the corrected age of patient: "))
+    NewNumber = int(input("Enter the corrected phone number of patient: "))
 
 def DeptEdit(id):
     NewDept = input("Enter the corrected department name : ")

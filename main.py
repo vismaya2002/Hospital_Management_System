@@ -35,8 +35,7 @@ def main():
             case 1:
                 Patient(connection,cursor)
             case 2:
-                Doctor()
-                
+                Doctor(connection,cursor)
             case 6:
                 break
     
