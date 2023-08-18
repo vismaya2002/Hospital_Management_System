@@ -1,7 +1,7 @@
 def InsertDoctor(connection,cursor):
-    cursor.execute('select * from patient')
+    cursor.execute('select * from doctor')
     val = cursor.fetchall()
-    id = "DOC"+len(val)+1001
+    id = len(val)+10001
     name = input("Enter the name of doctor:  \n")
     age = int(input("Enter the age of doctor: \n"))
     dept = input("Enter the department of doctor: \n")
