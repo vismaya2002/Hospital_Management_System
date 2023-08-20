@@ -11,30 +11,45 @@ def InsertPatient(connection,cursor):
     connection.commit()
     print("\nPatient created successfully\n")
 
-def NameEdit(id):
+def NameEdit(id,connection,cursor):
     NewName = input("Enter the corrected name of patient: ")
+    cursor.execute("update patient set name='{}' where PatientId={}".format(NewName,id))
+    connection.commit()
+    print("\n patient name updated successfully \n")
 
-def AgeEdit(id):
+def AgeEdit(id,connection,cursor):
     NewAge = input("Enter the corrected age of patient: ")
+    cursor.execute("update patient set age={} where PatientId={}".format(NewAge,id))
+    connection.commit()
+    print("\n patient age updated successfully \n")
 
-def PhoneNumberEdit(id):
+def PhoneNumberEdit(id,connection,cursor):
     NewNumber = int(input("Enter the corrected phone number of patient: "))
+    cursor.execute("update patient set phnnumber={} where PatientId={}".format(NewNumber,id))
+    connection.commit()
+    print("\n patient phone number updated successfully \n")
 
-def DeptEdit(id):
+def DeptEdit(id,connection,cursor):
     NewDept = input("Enter the corrected department name : ")
+    cursor.execute("update patient set consuldept='{}' where PatientId={}".format(NewDept,id))
+    connection.commit()
+    print("\n patient consulting department updated successfully \n")
 
-def DocEdit(id):
+def DocEdit(id,connection,cursor):
     NewDoc = input("Enter the corrected doctor name : ")
+    cursor.execute("update patient set consuldoc='{}' where PatientId={}".format(NewDoc,id))
+    connection.commit()
+    print("\n patient consulting doctor updated successfully \n")
 
 def EditPatient(connection,cursor):
+    id = int(input("Enter the PatientId: \n"))
     while True:
         lst = []
         print("Edit The Details Of Patient...")
-        id = int(input("Enter the PatientId: \n"))
         cursor.execute('select * from patient')
         for i in cursor:
             lst.append(i[0])
-        print(lst)
+        #print(lst)    
         if id not in lst:
             print("enter a valid id")
             continue
@@ -47,15 +62,15 @@ def EditPatient(connection,cursor):
         y = int(input("Enter Your Choice: "))
         match y:
             case 1:
-                NameEdit(id)
+                NameEdit(id,connection,cursor)
             case 2:
-                AgeEdit(id)
+                AgeEdit(id,connection,cursor)
             case 3:
-                PhoneNumberEdit(id)
+                PhoneNumberEdit(id,connection,cursor)
             case 4:
-                DeptEdit(id)
+                DeptEdit(id,connection,cursor)
             case 5:
-                DocEdit(id)
+                DocEdit(id,connection,cursor)
             case 6:
                 break
             case default:
