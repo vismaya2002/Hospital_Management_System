@@ -80,13 +80,14 @@ def EditPatient(connection,cursor):
 def DeletePatient(connection,cursor):
     id = int(input("enter the id of patient to be deleted: \n"))
     lst = []
-    print("\n deleting the details of the patient \n")
+    
     cursor.execute('select * from patient')
     for j in cursor:
         lst.append(j[0])
+    print("\n deleting the details of the patient \n")
     if id not in lst:
         print("\n enter a valid id \n")
-        
+    
     cursor.execute("delete from patient where PatientId={}".format(id))
     connection.commit()
     print("\n deletion is successful \n")   
