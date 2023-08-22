@@ -77,6 +77,22 @@ def EditPatient(connection,cursor):
                 print("You Entered The Wrong Choice.")
 
 
+def DeletePatient(connection,cursor):
+    id = int(input("enter the id of patient to be deleted: \n"))
+    lst = []
+    print("\n deleting the details of the patient \n")
+    cursor.execute('select * from patient')
+    for j in cursor:
+        lst.append(j[0])
+    if id not in lst:
+        print("\n enter a valid id \n")
+        
+    cursor.execute("delete from patient where PatientId={}".format(id))
+    connection.commit()
+    print("\n deletion is successful \n")   
+
+
+
 
 def Patient(connection,cursor):
     while True:
@@ -94,6 +110,9 @@ def Patient(connection,cursor):
 
             case 2:
                 EditPatient(connection,cursor)
+
+            case 3:
+                DeletePatient(connection,cursor)
                 
             case 5:
                 break
