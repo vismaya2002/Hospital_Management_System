@@ -93,6 +93,20 @@ def DeletePatient(connection,cursor):
     print("\n deletion is successful \n")   
 
 
+def ViewPatient(connection,cursor):
+    id = int(input("enter the id of patient to be viewed: \n"))
+    lst = []
+    cursor.execute('select * from patient')
+    for k in cursor:
+        lst.append(k[0])
+    print(("viewing the details of patient\n"))
+    if id not in lst:
+        print(("enter a valid id\n"))
+    cursor.execute("select * from patient where PatientId={}".format(id))
+    print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+    for i in cursor:
+        print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+    print("\n details are displayed successfully \n")
 
 
 def Patient(connection,cursor):
@@ -114,6 +128,9 @@ def Patient(connection,cursor):
 
             case 3:
                 DeletePatient(connection,cursor)
+
+            case 4:    
+                ViewPatient(connection,cursor)
                 
             case 5:
                 break
