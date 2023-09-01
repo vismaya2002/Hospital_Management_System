@@ -1,13 +1,16 @@
 def InsertPatient(connection,cursor):
     cursor.execute('select * from patient')
     val = cursor.fetchall()
-    id = len(val)+101
+    if len(val)==0:
+        id = 101
+    else:
+        id = val[-1][0]+1
     name = input("Enter the name of patient : \n")
     age = int(input("Enter the age of patient : \n"))
     PhnNumber = int(input("Enter the phone number of patient : \n"))
-    ConsultingDepartment = input("Enter the department consulted : \n")
-    ConsulitngDoctor = input("Enter the name of doctor consulting : \n")
-    cursor.execute("insert into patient values({},'{}',{},{},'{}','{}')".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
+    ConsultingDepartment = int(input("Enter the departmentid to be consulted : \n"))
+    ConsulitngDoctor = int(input("Enter the id of doctor consulting : \n"))
+    cursor.execute("insert into patient values({},'{}',{},{},{},{})".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
     connection.commit()
     print("\nPatient created successfully\n")
 
@@ -30,20 +33,21 @@ def PhoneNumberEdit(id,connection,cursor):
     print("\n patient phone number updated successfully \n")
 
 def DeptEdit(id,connection,cursor):
-    NewDept = input("Enter the corrected department name : ")
-    cursor.execute("update patient set consuldept='{}' where PatientId={}".format(NewDept,id))
+    NewDept = int(input("Enter the corrected department name : "))
+    cursor.execute("update patient set consuldept={} where PatientId={}".format(NewDept,id))
     connection.commit()
     print("\n patient consulting department updated successfully \n")
 
 def DocEdit(id,connection,cursor):
-    NewDoc = input("Enter the corrected doctor name : ")
-    cursor.execute("update patient set consuldoc='{}' where PatientId={}".format(NewDoc,id))
+    NewDoc = int(input("Enter the corrected doctor id : "))
+    cursor.execute("update patient set consuldoc={} where PatientId={}".format(NewDoc,id))
     connection.commit()
     print("\n patient consulting doctor updated successfully \n")
 
 def EditPatient(connection,cursor):
-    id = int(input("Enter the PatientId: \n"))
+    
     while True:
+        id = int(input("Enter the PatientId: \n"))
         lst = []
         print("Edit The Details Of Patient...")
         cursor.execute('select * from patient')
@@ -51,7 +55,7 @@ def EditPatient(connection,cursor):
             lst.append(i[0])
         #print(lst)    
         if id not in lst:
-            print("enter a valid id")
+            print("enter a valid PatientId")
             continue
         print("1. Edit Patient Name")
         print("2. Edit Patient age")
@@ -78,20 +82,24 @@ def EditPatient(connection,cursor):
 
 
 def DeletePatient(connection,cursor):
-    id = int(input("enter the id of patient to be deleted: \n"))
-    lst = []
-    
-    cursor.execute('select * from patient')
-    for j in cursor:
-        lst.append(j[0])
-    print("\n deleting the details of the patient \n")
-    if id not in lst:
-        print("\n enter a valid id \n")
-    
-    cursor.execute("delete from patient where PatientId={}".format(id))
-    connection.commit()
-    print("\n deletion is successful \n")   
-
+    while True:
+        id = int(input("enter the id of patient to be deleted: \n"))
+        lst = []
+        
+        cursor.execute('select * from patient')
+        for j in cursor:
+            lst.append(j[0])
+        print("\n deleting the details of the patient \n")
+        if id not in lst:
+            print("\n enter a valid id \n")
+            x = int(input("Press 1 to go back to main menu !!\n"))
+            if x==1:
+                break
+            continue
+        cursor.execute("delete from patient where PatientId={}".format(id))
+        connection.commit()
+        print("\n deletion is successful \n")   
+        break
 
 def ViewPatient(connection,cursor):
     id = int(input("enter the id of patient to be viewed: \n"))
@@ -102,6 +110,7 @@ def ViewPatient(connection,cursor):
     print(("viewing the details of patient\n"))
     if id not in lst:
         print(("enter a valid id\n"))
+        return
     cursor.execute("select * from patient where PatientId={}".format(id))
     print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
     for i in cursor:
