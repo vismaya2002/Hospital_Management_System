@@ -36,6 +36,31 @@ def EditDetails(connection,cursor):
             case default:
                 print("You entered the wrong choice")
 
+def DeleteDetails(connection,cursor):
+    while True:
+        print("Delete Department......\n")
+        cursor.execute('select * from department')
+        datas = cursor.fetchall()
+        print("departmentid\tdepartmentname\n")
+        for i in datas:
+            print("{}\t\t{}\n".format(i[0],i[1]))
+        id = int(input("enter the id of department to be deleted: \n"))
+        lst = []
+        cursor.execute('select * from patient')
+        for j in cursor:
+            lst.append(j[0])
+        print("\n deleting the details of the patient \n")
+        if id not in lst:
+            print("\n Sorry, enter a valid id \n")
+            x = int(input("Press 1 to go back to main menu !!\n"))
+            if x==1:
+                break
+            continue
+        cursor.execute('delete from department where deptid={}'.format(id))
+        connection.commit()
+        print("\nDeletion is successfull\n")
+        break
+
 def Department(connection,cursor):
     while True:
         print("****** DEPARTMENT ******")
@@ -51,4 +76,7 @@ def Department(connection,cursor):
                 InsertDetails(connection,cursor)
             case 2:
                 EditDetails(connection,cursor)
+            case 3:
+                DeleteDetails(connection,cursor)
+            case 4:
                 break
