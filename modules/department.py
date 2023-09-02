@@ -61,6 +61,14 @@ def DeleteDetails(connection,cursor):
         print("\nDeletion is successfull\n")
         break
 
+def ViewDetails(connection,cursor):
+    print("\nViewing the department details\n")
+    cursor.execute('select * from department')
+    data = cursor.fetchall()
+    print("departmentid\tdepartmentname\n")
+    for i in data:
+        print("{}\t\t{}\n".format(i[0],i[1]))
+
 def Department(connection,cursor):
     while True:
         print("****** DEPARTMENT ******")
@@ -79,4 +87,6 @@ def Department(connection,cursor):
             case 3:
                 DeleteDetails(connection,cursor)
             case 4:
+                ViewDetails(connection,cursor)
+            case 5:
                 break
