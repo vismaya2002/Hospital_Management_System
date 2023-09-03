@@ -1,19 +1,27 @@
 def InsertDoctor(connection,cursor):
+    cursor.execute('select * from department')
+    dataz = cursor.fetchall()
+    print("departmentid\tdepartmentname\n")
+    for i in dataz:
+        print("{}\t\t{}\n".format(i[0],i[1]))
     cursor.execute('select * from doctor')
     val = cursor.fetchall()
-    id = len(val)+10001
+    id = len(val)+10001    
     name = input("Enter the name of doctor:  \n")
     age = int(input("Enter the age of doctor: \n"))
-    dept = input("Enter the department of doctor: \n")
+    deptid = int(input("Enter the department of doctor: \n"))
     qualific = input("Enter the qualification of the doctor: \n")
     phnnumber = int(input("enter the phone number of doctor: \n"))
-    cursor.execute("insert into doctor values({},'{}',{},'{}','{}',{})".format(id,name,age,dept,qualific,phnnumber))
+    cursor.execute("insert into doctor values({},'{}',{},'{}','{}',{})".format(id,name,age,deptid,qualific,phnnumber))
     connection.commit()
     print("\nDoctor created successfully\n")
 
 
-def NameEdit():
+def NameEdit(id,connection,cursor):
     newname = input("enter the new name of doctor: \n")
+    cursor.execute("update doctor set name='{}' where doctorid={}".format(newname,id))
+    connection.commit()
+    print("\n patient name updated successfully \n")
 
 def AgeEdit():
     newage = input("enter the new age of doctor: \n")
@@ -28,7 +36,7 @@ def phnedit():
     newphn = input("enter the new phone number of doctor: \n")
 
 
-def EditDoctor():
+def EditDoctor(connection,cursor):
     while True:
         print("Edit The Details of Doctor...")
         id = int(input("enter the id of doctor: \n"))
@@ -40,7 +48,9 @@ def EditDoctor():
         y = int(input("Enter your choice: \n"))
         match y:
             case 1:
-                pass
+                NameEdit(id,connection,cursor)
+            case 2:
+                break
 
 def Doctor(connection,cursor):
     while True:
