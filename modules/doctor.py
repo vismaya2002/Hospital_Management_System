@@ -52,6 +52,16 @@ def EditDoctor(connection,cursor):
     while True:
         print("Edit The Details of Doctor...")
         id = int(input("enter the id of doctor \n"))
+        lst = []
+        cursor.execute('select * from patient')
+        for i in cursor:
+            lst.append(i[0])
+        #print(lst)    
+        if id not in lst:
+            print("enter a valid DoctorId")
+            z = int(input("Press 1 to go back to main menu..."))
+            if z==1:
+                Doctor(connection,cursor)
         print("1. Enter the edited name of doctor \n")
         print("2. Enter the edited age of doctor \n")
         print("3. Enter the edited department of doctor \n")
