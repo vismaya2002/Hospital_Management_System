@@ -8,7 +8,15 @@ def InsertPatient(connection,cursor):
     name = input("Enter the name of patient : \n")
     age = int(input("Enter the age of patient : \n"))
     PhnNumber = int(input("Enter the phone number of patient : \n"))
+    cursor.execute('select * from department order by department')
+    print("DepartmentId\tDepartmentName\n")
+    for x in cursor:
+        print("{}\t\t{}".format(x[0],x[1]))
     ConsultingDepartment = int(input("Enter the departmentid to be consulted : \n"))
+    cursor.execute("select deptid,doctorid,name,qualification from doctor where deptid={}".format(ConsultingDepartment))
+    print("DepartmentId\tDoctorId\tName\tQualification\n")
+    for z in cursor:
+        print("{}\t\t{}\t\t{}\t\t{}".format(z[0],z[1],z[2],z[3]))
     ConsulitngDoctor = int(input("Enter the id of doctor consulting : \n"))
     cursor.execute("insert into patient values({},'{}',{},{},{},{})".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
     connection.commit()

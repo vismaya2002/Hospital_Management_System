@@ -1,5 +1,5 @@
 def InsertDoctor(connection,cursor):
-    cursor.execute('select * from department')
+    cursor.execute('select * from department order by department')
     dataz = cursor.fetchall()
     print("departmentid\tdepartmentname\n")
     for i in dataz:
@@ -123,9 +123,9 @@ def ViewDoctor(connection,cursor):
         for i in cursor:
             l.append(i)
         print(("Viewing the details of doctor\n"))
-        print("department name\tdepartmentId\tname\tage\tqualification\tphone number\n")
+        print("DepartmentName\tDepartmentId\t\tName\t\tAge\t\tQualification\tPhoneNumber\n")
         for i in l:
-            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+            print("{}\t\t{}\t\t{}\t{}\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
         print("\n details are displayed successfully \n")
     else:
         print(("enter a valid id\n"))
