@@ -53,7 +53,7 @@ def EditDoctor(connection,cursor):
         print("Edit The Details of Doctor...")
         id = int(input("enter the id of doctor \n"))
         lst = []
-        cursor.execute('select * from patient')
+        cursor.execute('select * from doctor')
         for i in cursor:
             lst.append(i[0])
         #print(lst)    
@@ -62,27 +62,74 @@ def EditDoctor(connection,cursor):
             z = int(input("Press 1 to go back to main menu..."))
             if z==1:
                 Doctor(connection,cursor)
-        print("1. Enter the edited name of doctor \n")
-        print("2. Enter the edited age of doctor \n")
-        print("3. Enter the edited department of doctor \n")
-        print("4. Enter the edited qualification of doctor \n")
-        print("5. Enter the edited phone number of doctor \n")
+            else:
+                break
+        print("1. Edit name of doctor \n")
+        print("2. Edit age of doctor \n")
+        print("3. Edit department of doctor \n")
+        print("4. Edit qualification of doctor \n")
+        print("5. Edit phone number of doctor \n")
         y = int(input("Enter your choice: \n"))
         match y:
             case 1:
                 NameEdit(id,connection,cursor)
+                break
             case 2:
                 AgeEdit(id,connection,cursor)
+                break
             case 3:
                 Deptedit(id,connection,cursor)
+                break
             case 4:
                 Qualifedit(id,connection,cursor)
+                break
             case 5:
                 Phnedit(id,connection,cursor)
+                break
             case 6:
                 break
             case default:
                 print("You Entered The Wrong Choice.")
+
+def DeleteDoctor(connection,cursor):
+    while True:
+        id = int(input("enter id of doctor to be deleted:\n"))
+        lst = []
+        cursor.execute('select * from doctor')
+        for i in cursor:
+            lst.append(i[0])
+        print("deleting the details of doctor")
+        if id not in lst:
+            print("\n enter a valid id \n")
+            x = int(input("Press 1 to go back to main menu !!\n"))
+            if x==1:
+                break
+            continue
+        cursor.execute("delete from doctor where doctorid={}".format(id))
+        connection.commit()
+        print("\n deletion is successful \n")   
+        break
+
+def ViewDoctor(connection,cursor):
+    id = int(input("enter the id of doctor to be viewed: \n"))
+    lst = []
+    l = []
+    cursor.execute('select * from doctor')
+    for j in cursor:
+        lst.append(j[0])
+    print(lst)
+    if id in lst:
+        cursor.execute('select department.department,department.deptid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid')
+        for i in cursor:
+            l.append(i)
+        print(("Viewing the details of doctor\n"))
+        print("department name\tdepartmentId\tname\tage\tqualification\tphone number\n")
+        for i in l:
+            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+        print("\n details are displayed successfully \n")
+    else:
+        print(("enter a valid id\n"))
+        
 
 def Doctor(connection,cursor):
     while True:
@@ -99,4 +146,8 @@ def Doctor(connection,cursor):
             case 2:
                 EditDoctor(connection,cursor)
             case 3:
+                DeleteDoctor(connection,cursor)
+            case 4:
+                ViewDoctor(connection,cursor)
+            case 5:
                 break
