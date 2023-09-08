@@ -56,6 +56,10 @@ def EditPatient(connection,cursor):
     
     while True:
         id = int(input("Enter the PatientId: \n"))
+        cursor.execute("select * from patient where PatientId={}".format(id))
+        print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+        for i in cursor:
+            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
         lst = []
         print("Edit The Details Of Patient...")
         cursor.execute('select * from patient')
@@ -92,22 +96,32 @@ def EditPatient(connection,cursor):
 def DeletePatient(connection,cursor):
     while True:
         id = int(input("enter the id of patient to be deleted: \n"))
+        cursor.execute("select * from patient where PatientId={}".format(id))
+        print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+        for i in cursor:
+            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
         lst = []
-        
         cursor.execute('select * from patient')
         for j in cursor:
             lst.append(j[0])
-        print("\n deleting the details of the patient \n")
         if id not in lst:
             print("\n enter a valid id \n")
             x = int(input("Press 1 to go back to main menu !!\n"))
             if x==1:
                 break
             continue
-        cursor.execute("delete from patient where PatientId={}".format(id))
-        connection.commit()
-        print("\n deletion is successful \n")   
-        break
+        x = int(input("Press 1 if you want to delete...\n"))
+        if x==1:
+            print("\n deleting the details of the patient \n")
+            cursor.execute("delete from patient where PatientId={}".format(id))
+            connection.commit()
+            print("\n deletion is successful \n")   
+            break
+        else:
+            print("Incorrect request.")
+            break
+        
+        
 
 def ViewPatient(connection,cursor):
     id = int(input("enter the id of patient to be viewed: \n"))
