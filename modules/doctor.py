@@ -1,9 +1,22 @@
+from rich.console import Console
+from rich.table import Table
+
+
 def InsertDoctor(connection,cursor):
+    table = Table(title="DEPARTMENT")
     cursor.execute('select * from department order by department')
     dataz = cursor.fetchall()
-    print("departmentid\tdepartmentname\n")
+    columns = ['Department Id','Department Name']
+    rows = []
     for i in dataz:
-        print("{}\t\t{}\n".format(i[0],i[1]))
+        temprow = [str(i[0]),i[1]]
+        rows.append(temprow)
+    for column in columns:
+        table.add_column(column)
+    for row in rows:
+        table.add_row(*row, style='black')
+    console = Console()
+    console.print(table)
     cursor.execute('select * from doctor')
     val = cursor.fetchall()
     id = len(val)+10001    
@@ -95,17 +108,26 @@ def DeleteDoctor(connection,cursor):
     while True:
         id = int(input("enter id of doctor to be deleted:\n"))
         cursor.execute("select * from doctor where doctorid={}".format(id))
-        print("doctorid\tdoctorname\tage\tdepartmentid\tqualification\tphone number\n")
+        table = Table(title="DOCTOR DETAILS")
+        columns = ["Doctor Id","Doctor Name","Age","Department Id","Qualification","Phone Number"]
+        rows = []
         for i in cursor:
-            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+            temprow = [str(i[0]),i[1],str(i[2]),str(i[3]),i[4],str(i[5])]
+            rows.append(temprow)
+        for column in columns:
+            table.add_column(column)
+        for row in rows:
+            table.add_row(*row, style='black')
+        console = Console()
+        console.print(table)
         lst = []
         cursor.execute('select * from doctor')
         for i in cursor:
             lst.append(i[0])
         if id not in lst:
             print("\n enter a valid id \n")
-            x = int(input("Press 1 to go back to main menu !!\n"))
-            if x==1:
+            x = input("Press 1 to go back to main menu !!\n")
+            if x=='1':
                 break
             continue
         x = int(input("Press 1 if you want to delete...\n"))
@@ -117,6 +139,7 @@ def DeleteDoctor(connection,cursor):
             break
         else:
             print("Incorrect Request...")
+            break
 
 def ViewDoctor(connection,cursor):
     id = int(input("enter the id of doctor to be viewed: \n"))
@@ -125,15 +148,23 @@ def ViewDoctor(connection,cursor):
     cursor.execute('select * from doctor')
     for j in cursor:
         lst.append(j[0])
-    
+    table = Table(title="DOCTOR DETAILS")
     if id in lst:
         cursor.execute('select department.department,department.deptid,doctor.doctorid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid and doctorid={}'.format(id))
         for i in cursor:
             l.append(i)
         print(("Viewing the details of doctor\n"))
-        print("DepartmentName\tDepartmentId\t\tDoctorId\t\tName\t\tAge\t\tQualification\tPhoneNumber\n")
+        rows = []
+        columns = ["Department Name","Department Id","Doctor Id","Name","Age","Qualification","Phone Number"]
         for i in l:
-            print("{}\t\t{}\t\t{}\t\t{}\t\t{}\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
+            temprow = [i[0],str(i[1]),str(i[2]),i[3],str(i[4]),i[5],str(i[6])]
+            rows.append(temprow)
+        for column in columns:
+            table.add_column(column)
+        for row in rows:
+            table.add_row(*row, style='black')
+        console = Console()
+        console.print(table)
         print("\n details are displayed successfully \n")
     else:
         print(("enter a valid id\n"))
