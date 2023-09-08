@@ -94,21 +94,29 @@ def EditDoctor(connection,cursor):
 def DeleteDoctor(connection,cursor):
     while True:
         id = int(input("enter id of doctor to be deleted:\n"))
+        cursor.execute("select * from doctor where doctorid={}".format(id))
+        print("doctorid\tdoctorname\tage\tdepartmentid\tqualification\tphone number\n")
+        for i in cursor:
+            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
         lst = []
         cursor.execute('select * from doctor')
         for i in cursor:
             lst.append(i[0])
-        print("deleting the details of doctor")
         if id not in lst:
             print("\n enter a valid id \n")
             x = int(input("Press 1 to go back to main menu !!\n"))
             if x==1:
                 break
             continue
-        cursor.execute("delete from doctor where doctorid={}".format(id))
-        connection.commit()
-        print("\n deletion is successful \n")   
-        break
+        x = int(input("Press 1 if you want to delete...\n"))
+        if x==1:
+            print("deleting the details of doctor")
+            cursor.execute("delete from doctor where doctorid={}".format(id))
+            connection.commit()
+            print("\n deletion is successful \n")   
+            break
+        else:
+            print("Incorrect Request...")
 
 def ViewDoctor(connection,cursor):
     id = int(input("enter the id of doctor to be viewed: \n"))
@@ -117,15 +125,15 @@ def ViewDoctor(connection,cursor):
     cursor.execute('select * from doctor')
     for j in cursor:
         lst.append(j[0])
-    print(lst)
+    
     if id in lst:
-        cursor.execute('select department.department,department.deptid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid')
+        cursor.execute('select department.department,department.deptid,doctor.doctorid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid and doctorid={}'.format(id))
         for i in cursor:
             l.append(i)
         print(("Viewing the details of doctor\n"))
-        print("DepartmentName\tDepartmentId\t\tName\t\tAge\t\tQualification\tPhoneNumber\n")
+        print("DepartmentName\tDepartmentId\t\tDoctorId\t\tName\t\tAge\t\tQualification\tPhoneNumber\n")
         for i in l:
-            print("{}\t\t{}\t\t{}\t{}\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+            print("{}\t\t{}\t\t{}\t\t{}\t\t{}\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
         print("\n details are displayed successfully \n")
     else:
         print(("enter a valid id\n"))
