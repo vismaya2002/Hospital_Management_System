@@ -131,12 +131,12 @@ def ViewPatient(connection,cursor):
         lst.append(k[0])
     print(("viewing the details of patient\n"))
     if id not in lst:
-        print(("enter a valid id\n"))
+        print(("Sorry, enter a valid id\n"))
         return
-    cursor.execute("select * from patient where PatientId={}".format(id))
-    print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+    cursor.execute("select patient.PatientId,patient.name,patient.age,patient.phone_number,patient.department_id,doctor.doctorid,doctor.name from patient,doctor where patient.doctor_id=doctor.doctorid and PatientId={}".format(id))
+    print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor Id\tdoctor consulted\n")
     for i in cursor:
-        print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+        print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
     print("\n details are displayed successfully \n")
 
 
