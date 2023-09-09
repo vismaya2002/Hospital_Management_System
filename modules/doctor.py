@@ -142,32 +142,56 @@ def DeleteDoctor(connection,cursor):
             break
 
 def ViewDoctor(connection,cursor):
-    id = int(input("enter the id of doctor to be viewed: \n"))
-    lst = []
-    l = []
-    cursor.execute('select * from doctor')
-    for j in cursor:
-        lst.append(j[0])
-    table = Table(title="DOCTOR DETAILS")
-    if id in lst:
-        cursor.execute('select department.department,department.deptid,doctor.doctorid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid and doctorid={}'.format(id))
-        for i in cursor:
-            l.append(i)
-        print(("Viewing the details of doctor\n"))
-        rows = []
-        columns = ["Department Name","Department Id","Doctor Id","Name","Age","Qualification","Phone Number"]
-        for i in l:
-            temprow = [i[0],str(i[1]),str(i[2]),i[3],str(i[4]),i[5],str(i[6])]
-            rows.append(temprow)
-        for column in columns:
-            table.add_column(column)
-        for row in rows:
-            table.add_row(*row, style='black')
+    y = int(input("Press 1 if you want to view the details of the entire doctors OR 0 to view details of a single doctor...\n"))
+    doclist = []
+    if y==1:
+        cursor.execute('select department.department,department.deptid,doctor.doctorid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid')
+        datas = cursor.fetchall()
+        for k in datas:
+            doclist.append(k)
+        tables = Table(title="DOCTOR DETAILS")
+        srow = []
+        scolumn = ["Department Name","Department Id","Doctor Id","Name","Age","Qualification","Phone Number"]
+        for j in doclist:
+            temprows = [j[0],str(j[1]),str(j[2]),j[3],str(j[4]),j[5],str(j[6])]
+            srow.append(temprows)
+        for column in scolumn:
+            tables.add_column(column)
+        for row in srow:
+            tables.add_row(*row, style='black')
         console = Console()
-        console.print(table)
-        print("\n details are displayed successfully \n")
+        console.print(tables)
+    elif y==0:
+
+        id = int(input("enter the id of doctor to be viewed: \n"))
+        lst = []
+        l = []
+        cursor.execute('select * from doctor')
+        for j in cursor:
+            lst.append(j[0])
+        table = Table(title="DOCTOR DETAILS")
+        if id in lst:
+            cursor.execute('select department.department,department.deptid,doctor.doctorid,doctor.name,doctor.age,doctor.qualification,doctor.phnnumber from department,doctor where department.deptid=doctor.deptid and doctorid={}'.format(id))
+            for i in cursor:
+                l.append(i)
+            print(("Viewing the details of doctor\n"))
+            rows = []
+            columns = ["Department Name","Department Id","Doctor Id","Name","Age","Qualification","Phone Number"]
+            for i in l:
+                temprow = [i[0],str(i[1]),str(i[2]),i[3],str(i[4]),i[5],str(i[6])]
+                rows.append(temprow)
+            for column in columns:
+                table.add_column(column)
+            for row in rows:
+                table.add_row(*row, style='black')
+            console = Console()
+            console.print(table)
+            print("\n details are displayed successfully \n")
+        else:
+            print(("enter a valid id\n"))
     else:
-        print(("enter a valid id\n"))
+        print("Invalid request...")
+        
         
 
 def Doctor(connection,cursor):

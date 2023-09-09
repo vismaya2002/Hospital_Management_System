@@ -1,3 +1,8 @@
+from rich.console import Console
+from rich.table import Table
+from rich.markdown import Markdown
+from rich import print
+from rich.style import Style
 def InsertPatient(connection,cursor):
     cursor.execute('select * from patient')
     val = cursor.fetchall()
@@ -8,10 +13,19 @@ def InsertPatient(connection,cursor):
     name = input("Enter the name of patient : \n")
     age = int(input("Enter the age of patient : \n"))
     PhnNumber = int(input("Enter the phone number of patient : \n"))
+    table = Table(title="DEPARTMENTS")
     cursor.execute('select * from department order by department')
-    print("DepartmentId\tDepartmentName\n")
+    columns = ["Department Id","Department Name"]
+    rows = []
     for x in cursor:
-        print("{}\t\t{}".format(x[0],x[1]))
+        temprow = [str(x[0]),x[1]]
+        rows.append(temprow)
+    for column in columns:
+        table.add_column(column)
+    for row in rows:
+        table.add_row(*row, style='black')
+    console = Console()
+    console.print(table)
     ConsultingDepartment = int(input("Enter the departmentid to be consulted : \n"))
     cursor.execute("select deptid,doctorid,name,qualification from doctor where deptid={}".format(ConsultingDepartment))
     print("DepartmentId\tDoctorId\tName\tQualification\n")
@@ -118,7 +132,7 @@ def DeletePatient(connection,cursor):
             print("\n deletion is successful \n")   
             break
         else:
-            print("Incorrect request.")
+            print("[bold red]Sorry, Incorrect Request.[/bold red]")
             break
         
         
@@ -131,24 +145,32 @@ def ViewPatient(connection,cursor):
         lst.append(k[0])
     print(("viewing the details of patient\n"))
     if id not in lst:
-        print(("Sorry, enter a valid id\n"))
+        print(("[bold red]Sorry, enter a valid id[bold red]\n"))
         return
+    table = Table(title="PATIENT DETAILS")
     cursor.execute("select patient.PatientId,patient.name,patient.age,patient.phone_number,patient.department_id,doctor.doctorid,doctor.name from patient,doctor where patient.doctor_id=doctor.doctorid and PatientId={}".format(id))
-    print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor Id\tdoctor consulted\n")
+    columns = ["Patient Id","Patient Name","Age","Phone Number","Department Consulted","Doctor Id","Doctor Consulted"]
+    rows = []
     for i in cursor:
-        print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5],i[6]))
-    print("\n details are displayed successfully \n")
+        temprow =[str(i[0]),i[1],str(i[2]),str(i[3]),str(i[4]),str(i[5]),i[6]]
+        rows.append(temprow)
+    for column in columns:
+        table.add_column(column)
+    for row in rows:
+        table.add_row(*row, style='black')
+    console=Console()
+    console.print("\n details are displayed successfully \n" , style="bold")
 
 
 def Patient(connection,cursor):
     while True:
-
-        print("******* PATIENT *******")
-        print("1. Insert Details")
-        print("2. Edit Details")
-        print("3. Delete Details")
-        print("4. View Details")
-        print("5. Go Back")
+        
+        print("[bold green]******* PATIENT *******[/bold green]\n")
+        print("[bold green]1. Insert Details[/bold green]\n")
+        print("[bold green]2. Edit Details[/bold green]\n")
+        print("[bold green]3. Delete Details[/bold green]\n")
+        print("[bold green]4. View Details[/bold green]\n")
+        print("[bold green]5. Go Back[/bold green]\n")
         x = int(input("Enter Your Choice : "))
         match x:
             case 1:
