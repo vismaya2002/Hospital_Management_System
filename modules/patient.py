@@ -49,61 +49,107 @@ def InsertPatient(connection,cursor):
     ConsulitngDoctor = int(input("Enter the id of doctor consulting : \n"))
     cursor.execute("insert into patient values({},'{}',{},{},{},{})".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
     connection.commit()
-    print("\nPatient created successfully\n")
+    console.print("\nPatient Created Successfully!!!\n",style='bold')
 
 def NameEdit(id,connection,cursor):
-    NewName = input("Enter the corrected name of patient: ")
+    NewName = input("Enter the Corrected Name of Patient: ")
     cursor.execute("update patient set name='{}' where PatientId={}".format(NewName,id))
     connection.commit()
-    print("\n patient name updated successfully \n")
+    console = Console()
+    console.print("\n Patient Name Updated Successfully !!!\n",style='bold')
+    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
+    if q==1:
+        EditPatient(connection,cursor)
+    else:
+        Patient(connection,cursor)
 
 def AgeEdit(id,connection,cursor):
-    NewAge = input("Enter the corrected age of patient: ")
+    NewAge = input("Enter the Corrected Age of Patient: ")
     cursor.execute("update patient set age={} where PatientId={}".format(NewAge,id))
     connection.commit()
-    print("\n patient age updated successfully \n")
+    console = Console()
+    console.print("\n Patient Age Updated Successfully !!!\n",style='bold')
+    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
+    if q==1:
+        EditPatient(connection,cursor)
+    else:
+        Patient(connection,cursor)
 
 def PhoneNumberEdit(id,connection,cursor):
-    NewNumber = int(input("Enter the corrected phone number of patient: "))
-    cursor.execute("update patient set phnnumber={} where PatientId={}".format(NewNumber,id))
+    NewNumber = int(input("Enter the Corrected Phone Number of Patient: "))
+    cursor.execute("update patient set phone_number={} where PatientId={}".format(NewNumber,id))
     connection.commit()
-    print("\n patient phone number updated successfully \n")
+    console = Console()
+    console.print("\n Patient Phone Number Updated Successfully !!!\n",style='bold')
+    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
+    if q==1:
+        EditPatient(connection,cursor)
+    else:
+        Patient(connection,cursor)
 
 def DeptEdit(id,connection,cursor):
-    NewDept = int(input("Enter the corrected department name : "))
+    NewDept = int(input("Enter the Corrected Department Name : "))
     cursor.execute("update patient set consuldept={} where PatientId={}".format(NewDept,id))
     connection.commit()
-    print("\n patient consulting department updated successfully \n")
+    console = Console()
+    console.print("\n Patient Consulting Department Updated Successfully !!!\n",style='bold')
+    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
+    if q==1:
+        EditPatient(connection,cursor)
+    else:
+        Patient(connection,cursor)
 
 def DocEdit(id,connection,cursor):
-    NewDoc = int(input("Enter the corrected doctor id : "))
+    NewDoc = int(input("Enter the Corrected Doctor Id : "))
     cursor.execute("update patient set consuldoc={} where PatientId={}".format(NewDoc,id))
     connection.commit()
-    print("\n patient consulting doctor updated successfully \n")
+    console = Console()
+    console.print("\n Patient Consulting Doctor Updated Successfully !!!\n",style='bold')
+    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
+    if q==1:
+        EditPatient(connection,cursor)
+    else:
+        Patient(connection,cursor)
 
 def EditPatient(connection,cursor):
     
     while True:
         id = int(input("Enter the PatientId: \n"))
+        table = Table(title="DEPARTMENTS")
+        row = []
         cursor.execute("select * from patient where PatientId={}".format(id))
-        print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+        column = ["Patient Id","Patient Name","Age","Phone Number","Department Consulted","Doctor Consulted"]
         for i in cursor:
-            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+            temprow = [str(i[0]),i[1],str(i[2]),str(i[3]),str(i[4]),str(i[5])]
+            row.append(temprow)
+        for column in column:
+            table.add_column(column,style="cyan")
+        for row in row:
+            table.add_row(*row, style='magenta')
+        console = Console()
+        console.print(table)
         lst = []
-        print("Edit The Details Of Patient...")
+        console.print("Edit The Details Of Patient...",style='bold')
         cursor.execute('select * from patient')
         for i in cursor:
             lst.append(i[0])
         #print(lst)    
         if id not in lst:
-            print("enter a valid PatientId")
+            console.print("Enter a Valid Patient Id",style='bold')
             continue
-        print("1. Edit Patient Name")
-        print("2. Edit Patient age")
-        print("3. Edit Patient Phone Number")
-        print("4. Edit Consulting Department")
-        print("5. Edit Consulting Doctor")
-        print("6. Go Back")
+        Enter()
+        tables = Table(title="EDITION MENU")
+        tables.add_column("S. No.", style="cyan", no_wrap=True)
+        tables.add_column("Options", style="magenta")
+        tables.add_row("1.","Edit Patient Name")
+        tables.add_row("2.","Edit Patient age")
+        tables.add_row("3.","Edit Patient Phone Number")
+        tables.add_row("4.","Edit Consulting Department")
+        tables.add_row("5.","Edit Consulting Doctor")
+        tables.add_row("6.","Go Back")
+        console.print(tables)
+        Enter()
+
         y = int(input("Enter Your Choice: "))
         match y:
             case 1:
@@ -119,35 +165,44 @@ def EditPatient(connection,cursor):
             case 6:
                 break
             case default:
-                print("You Entered The Wrong Choice.")
+                console.print("You Entered The Wrong Choice.",style='bold red')
 
 
 def DeletePatient(connection,cursor):
     while True:
-        id = int(input("enter the id of patient to be deleted: \n"))
+        id = int(input("Enter The Id Of Patient To Be Deleted: \n"))
+        table = Table(title="PATIENT DETAILS")
+        row = []
         cursor.execute("select * from patient where PatientId={}".format(id))
-        print("patientid\tpatientname\tage\tphone number\tdepartment consulted\tdoctor consulted\n")
+        column = ["Patient Id","Patient Name","Age","Phone Number","Department Consulted","Doctor Consulted"]
         for i in cursor:
-            print("{}\t\t{}\t\t{}\t{}\t{}\t\t\t{}\n".format(i[0],i[1],i[2],i[3],i[4],i[5]))
+            temprow = [str(i[0]),i[1],str(i[2]),str(i[3]),str(i[4]),str(i[5])]
+            row.append(temprow)
+        for column in column:
+            table.add_column(column,style="cyan")
+        for row in row:
+            table.add_row(*row, style='magenta')
+        console = Console()
+        console.print(table)
         lst = []
         cursor.execute('select * from patient')
         for j in cursor:
             lst.append(j[0])
         if id not in lst:
-            print("\n enter a valid id \n")
-            x = int(input("Press 1 to go back to main menu !!\n"))
+            print("\n[bold red] Enter a Valid Id [/bold red]\n")
+            x = int(input("Press 1 To Go Back To Main Menu !!!\n"))
             if x==1:
                 break
             continue
-        x = int(input("Press 1 if you want to delete...\n"))
+        x = int(input("Press 1 if you want to DELETE...Else Press Any Other Key.... \n"))
         if x==1:
-            print("\n deleting the details of the patient \n")
+            console.print("\n Deleting The Details Of The Patient... \n",style='bold')
             cursor.execute("delete from patient where PatientId={}".format(id))
             connection.commit()
-            print("\n deletion is successful \n")   
+            console.print("\n Deletion Is Successful... \n",style='bold')   
             break
         else:
-            print("[bold red]Sorry, Incorrect Request.[/bold red]")
+            print("[bold red]Request Aborted.[/bold red]")
             break
         
         
@@ -155,10 +210,11 @@ def DeletePatient(connection,cursor):
 def ViewPatient(connection,cursor):
     id = int(input("enter the id of patient to be viewed: \n"))
     lst = []
+    console=Console()
     cursor.execute('select * from patient')
     for k in cursor:
         lst.append(k[0])
-    print(("viewing the details of patient\n"))
+    console.print("Viewing the Details of Patient\n",style='bold')
     if id not in lst:
         print(("[bold red]Sorry, enter a valid id[bold red]\n"))
         return
@@ -173,9 +229,8 @@ def ViewPatient(connection,cursor):
         table.add_column(column)
     for row in rows:
         table.add_row(*row, style='white')
-    console=Console()
     console.print(table)
-    console.print("\n details are displayed successfully \n" , style="bold")
+    console.print("\n Details are Displayed Successfully \n" , style="bold")
 
 
 def Patient(connection,cursor):
