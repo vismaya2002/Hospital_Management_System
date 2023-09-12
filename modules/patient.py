@@ -27,16 +27,25 @@ def InsertPatient(connection,cursor):
         temprow = [str(x[0]),x[1]]
         rows.append(temprow)
     for column in columns:
-        table.add_column(column)
+        table.add_column(column,style="cyan")
     for row in rows:
-        table.add_row(*row, style='black')
+        table.add_row(*row, style='magenta')
     console = Console()
     console.print(table)
     ConsultingDepartment = int(input("Enter the departmentid to be consulted : \n"))
+    tables = Table(title="DOCTOR DETAILS")
+    srow = []
     cursor.execute("select deptid,doctorid,name,qualification from doctor where deptid={}".format(ConsultingDepartment))
-    print("DepartmentId\tDoctorId\tName\tQualification\n")
+    scolumn = ["Department Id","Doctor Id","Name","Qualification"]
     for z in cursor:
-        print("{}\t\t{}\t\t{}\t\t{}".format(z[0],z[1],z[2],z[3]))
+        temprows = [str(z[0]),str(z[1]),z[2],z[3]]
+        srow.append(temprows)
+    for column in scolumn:
+        tables.add_column(column,style="cyan")
+    for row in srow:
+        tables.add_row(*row, style='magenta')
+    console = Console()
+    console.print(tables)
     ConsulitngDoctor = int(input("Enter the id of doctor consulting : \n"))
     cursor.execute("insert into patient values({},'{}',{},{},{},{})".format(id,name,age,PhnNumber,ConsultingDepartment,ConsulitngDoctor))
     connection.commit()
