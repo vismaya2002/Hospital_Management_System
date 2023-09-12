@@ -1,3 +1,11 @@
+from rich.console import Console
+from rich.table import Table
+
+console = Console()
+
+def Enter():
+    print('\n')
+
 def InsertDetails(connection,cursor):
     DepartmentId = int(input("enter the department id: \n"))
     DepartmentName = input("enter the department name : \n")
@@ -71,12 +79,23 @@ def ViewDetails(connection,cursor):
 
 def Department(connection,cursor):
     while True:
-        print("****** DEPARTMENT ******")
-        print("1. Insert Details" )
-        print("2. Edit Details" )
-        print("3. Delete Details" )
-        print("4. View Details" )
-        print("5. Go Back" )
+
+        Enter()
+
+        table = Table(title="DEPARTMENT")
+
+        table.add_column("S. No.", style="cyan", no_wrap=True)
+        table.add_column("Section", style="magenta")
+
+        table.add_row("1", "Insert Department")
+        table.add_row("2", "Edit Department")
+        table.add_row("3", "Delete Department")
+        table.add_row("4", "View Department Details")
+        table.add_row("5", "Go Back")
+
+        console.print(table)
+
+        Enter()
 
         x = int(input("enter your choice: \n"))
         match x:

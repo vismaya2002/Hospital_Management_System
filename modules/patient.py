@@ -3,6 +3,12 @@ from rich.table import Table
 from rich.markdown import Markdown
 from rich import print
 from rich.style import Style
+
+console = Console()
+
+def Enter():
+    print('\n')
+
 def InsertPatient(connection,cursor):
     cursor.execute('select * from patient')
     val = cursor.fetchall()
@@ -157,20 +163,32 @@ def ViewPatient(connection,cursor):
     for column in columns:
         table.add_column(column)
     for row in rows:
-        table.add_row(*row, style='black')
+        table.add_row(*row, style='white')
     console=Console()
+    console.print(table)
     console.print("\n details are displayed successfully \n" , style="bold")
 
 
 def Patient(connection,cursor):
     while True:
+
+        Enter()
+
+        table = Table(title="PATIENT ")
+
+        table.add_column("S. No.", style="cyan", no_wrap=True)
+        table.add_column("Section", style="magenta")
+
+        table.add_row("1", "Insert Patient")
+        table.add_row("2", "Edit Patient")
+        table.add_row("3", "Delete Patient")
+        table.add_row("4", "View Patient Details")
+        table.add_row("5", "Go Back")
+
+        console.print(table)
+
+        Enter()
         
-        print("[bold green]******* PATIENT *******[/bold green]\n")
-        print("[bold green]1. Insert Details[/bold green]\n")
-        print("[bold green]2. Edit Details[/bold green]\n")
-        print("[bold green]3. Delete Details[/bold green]\n")
-        print("[bold green]4. View Details[/bold green]\n")
-        print("[bold green]5. Go Back[/bold green]\n")
         x = int(input("Enter Your Choice : "))
         match x:
             case 1:
