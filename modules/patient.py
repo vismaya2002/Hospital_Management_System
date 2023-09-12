@@ -157,8 +157,9 @@ def ViewPatient(connection,cursor):
     for column in columns:
         table.add_column(column)
     for row in rows:
-        table.add_row(*row, style='black')
+        table.add_row(*row, style='white')
     console=Console()
+    console.print(table)
     console.print("\n details are displayed successfully \n" , style="bold")
 
 
