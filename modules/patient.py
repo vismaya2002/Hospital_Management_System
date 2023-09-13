@@ -57,11 +57,7 @@ def NameEdit(id,connection,cursor):
     connection.commit()
     console = Console()
     console.print("\n Patient Name Updated Successfully !!!\n",style='bold')
-    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
-    if q==1:
-        EditPatient(connection,cursor)
-    else:
-        Patient(connection,cursor)
+    
 
 def AgeEdit(id,connection,cursor):
     NewAge = input("Enter the Corrected Age of Patient: ")
@@ -69,11 +65,7 @@ def AgeEdit(id,connection,cursor):
     connection.commit()
     console = Console()
     console.print("\n Patient Age Updated Successfully !!!\n",style='bold')
-    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
-    if q==1:
-        EditPatient(connection,cursor)
-    else:
-        Patient(connection,cursor)
+    
 
 def PhoneNumberEdit(id,connection,cursor):
     NewNumber = int(input("Enter the Corrected Phone Number of Patient: "))
@@ -81,11 +73,7 @@ def PhoneNumberEdit(id,connection,cursor):
     connection.commit()
     console = Console()
     console.print("\n Patient Phone Number Updated Successfully !!!\n",style='bold')
-    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
-    if q==1:
-        EditPatient(connection,cursor)
-    else:
-        Patient(connection,cursor)
+    
 
 def DeptEdit(id,connection,cursor):
     NewDept = int(input("Enter the Corrected Department Name : "))
@@ -93,23 +81,14 @@ def DeptEdit(id,connection,cursor):
     connection.commit()
     console = Console()
     console.print("\n Patient Consulting Department Updated Successfully !!!\n",style='bold')
-    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
-    if q==1:
-        EditPatient(connection,cursor)
-    else:
-        Patient(connection,cursor)
-
+    
 def DocEdit(id,connection,cursor):
     NewDoc = int(input("Enter the Corrected Doctor Id : "))
     cursor.execute("update patient set consuldoc={} where PatientId={}".format(NewDoc,id))
     connection.commit()
     console = Console()
     console.print("\n Patient Consulting Doctor Updated Successfully !!!\n",style='bold')
-    q = int(input("Press 1 To Go Back To Corrected Details...\n"))
-    if q==1:
-        EditPatient(connection,cursor)
-    else:
-        Patient(connection,cursor)
+    
 
 def EditPatient(connection,cursor):
     
@@ -136,11 +115,17 @@ def EditPatient(connection,cursor):
         #print(lst)    
         if id not in lst:
             console.print("Enter a Valid Patient Id",style='bold')
-            continue
+            z = int(input("Press 1 to go back to main menu..."))
+            if z==1:
+                Patient(connection,cursor)
+            else:
+                break
+            
         Enter()
         tables = Table(title="EDITION MENU")
         tables.add_column("S. No.", style="cyan", no_wrap=True)
         tables.add_column("Options", style="magenta")
+
         tables.add_row("1.","Edit Patient Name")
         tables.add_row("2.","Edit Patient age")
         tables.add_row("3.","Edit Patient Phone Number")
