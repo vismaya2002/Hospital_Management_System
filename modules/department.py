@@ -7,18 +7,18 @@ def Enter():
     print('\n')
 
 def InsertDetails(connection,cursor):
-    DepartmentId = int(input("enter the department id: \n"))
-    DepartmentName = input("enter the department name : \n")
+    DepartmentId = int(input("Enter the Department Id: \n"))
+    DepartmentName = input("Enter the Department Name : \n")
     cursor.execute("insert into department values({},'{}')".format(DepartmentId,DepartmentName))
     connection.commit()
-    print("Details entered successfully!!!")
+    console.print("\nDetails entered successfully!!!\n",style='bold')
 
 
 def DeptNameEdit(DepartmentId,connection,cursor):
-    newdeptname = input("enter the new name of department: \n")
+    newdeptname = input("Enter the Edited Name of Department: \n")
     cursor.execute("update department set department='{}' where deptid={}".format(newdeptname,DepartmentId))
     connection.commit()
-    print("\n patient consulting department updated successfully \n")
+    console.print("\n Consulting Department Updated Successfully !!!\n",style='bold')
 
     k = int(input("Press 1 to Exit\n"))
     if k==1:
@@ -26,57 +26,90 @@ def DeptNameEdit(DepartmentId,connection,cursor):
 
 def EditDetails(connection,cursor):
     while True:
-        print("Edit Department Details...")
+        console.print("\nEdit Department Details...\n",style='bold')
+        table = Table(title="DEPARTMENTS")
+        row = []
         cursor.execute('select * from department')
         dataz = cursor.fetchall()
-        print("departmentid\tdepartmentname\n")
+        column = ["Department Id","Department Name"]
         for i in dataz:
-            print("{}\t\t{}\n".format(i[0],i[1]))
-        departmentid = int(input("enter the department id for editing: \n"))
-        print("1. Edit the name of department\n")
-        print("2. Go Back\n")
-        a = int(input("enter your choice: \n"))
+            temprow = (str(i[0]),i[1])
+            row.append(temprow)
+        for column in column:
+            table.add_column(column,style="cyan")
+        for row in row:
+            table.add_row(*row, style='magenta')
+        console.print(table)
+        departmentid = int(input("Enter the Department Id for Editing: \n"))
+
+        Enter()
+        tables = Table(title="EDITION MENU")
+        tables.add_column("S. No.", style="cyan", no_wrap=True)
+        tables.add_column("Options", style="magenta")
+        tables.add_row("1", "Edit the Name of Department")
+        tables.add_row("2", "Go Back")
+        console.print(tables)
+        Enter()
+
+        a = int(input("Enter Your Choice: \n"))
         match a:
             case 1:
                 DeptNameEdit(departmentid,connection,cursor)
             case 2:
+                Department(connection,cursor)
                 break
             case default:
-                print("You entered the wrong choice")
+                console.print("\nYou entered the wrong choice\n",style='bold red')
 
 def DeleteDetails(connection,cursor):
     while True:
-        print("Delete Department......\n")
+        console.print("Delete Department......\n",style='bold')
+        table = Table(title= "DEPARTMENTS")
+        row = []
         cursor.execute('select * from department')
         datas = cursor.fetchall()
-        print("departmentid\tdepartmentname\n")
+        column = ["Department Id","Department Name"]
         for i in datas:
-            print("{}\t\t{}\n".format(i[0],i[1]))
-        id = int(input("enter the id of department to be deleted: \n"))
+            temprows = (str(i[0]),i[1])
+            row.append(temprows)
+        for column in column:
+            table.add_column(column,style="cyan")
+        for row in row:
+            table.add_row(*row, style='magenta')
+        console.print(table)
+        id = int(input("Enter the Id of Department to be Deleted: \n"))
         lst = []
-        cursor.execute('select * from patient')
+        cursor.execute('select * from department')
         for j in cursor:
             lst.append(j[0])
-        print("\n deleting the details of the patient \n")
+        console.print("\n Deleting Department \n",style='bold')
         if id not in lst:
-            print("\n Sorry, enter a valid id \n")
+            console.print("\n Sorry, enter a valid id \n",style='bold red')
             x = int(input("Press 1 to go back to main menu !!\n"))
             if x==1:
                 break
             continue
         cursor.execute('delete from department where deptid={}'.format(id))
         connection.commit()
-        print("\nDeletion is successfull\n")
+        console.print("\nDeletion is Successfull\n",style='bold red')
         break
 
 def ViewDetails(connection,cursor):
-    print("\nViewing the department details\n")
+    console.print("\nViewing the Department Details\n",style='bold')
+    table = Table(title="DEPARTMENT")
+    row = []
     cursor.execute('select * from department')
     data = cursor.fetchall()
-    print("departmentid\tdepartmentname\n")
+    column = ["Department Id","Department Name"]
     for i in data:
-        print("{}\t\t{}\n".format(i[0],i[1]))
-
+        temprow = [str(i[0]),i[1]]
+        row.append(temprow)
+    for column in column:
+        table.add_column(column,style="cyan")
+    for row in row:
+        table.add_row(*row, style='magenta')
+    console.print(table)
+    
 def Department(connection,cursor):
     while True:
 
@@ -97,7 +130,7 @@ def Department(connection,cursor):
 
         Enter()
 
-        x = int(input("enter your choice: \n"))
+        x = int(input("Enter Your Choice: \n"))
         match x:
             case 1:
                 InsertDetails(connection,cursor)
