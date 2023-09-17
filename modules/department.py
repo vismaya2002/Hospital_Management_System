@@ -22,7 +22,7 @@ def DeptNameEdit(DepartmentId,connection,cursor):
 
     k = int(input("Press 1 to Exit\n"))
     if k==1:
-        Department(connection,cursor)
+        return
 
 def EditDetails(connection,cursor):
     while True:
@@ -55,8 +55,8 @@ def EditDetails(connection,cursor):
         match a:
             case 1:
                 DeptNameEdit(departmentid,connection,cursor)
+                break
             case 2:
-                Department(connection,cursor)
                 break
             case default:
                 console.print("\nYou entered the wrong choice\n",style='bold red')
@@ -109,7 +109,8 @@ def ViewDetails(connection,cursor):
     for row in row:
         table.add_row(*row, style='magenta')
     console.print(table)
-    
+    input("Press any Key to Continue !!!\n")
+
 def Department(connection,cursor):
     while True:
 

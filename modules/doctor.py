@@ -197,6 +197,7 @@ def ViewDoctor(connection,cursor):
             tables.add_row(*row, style='magenta')
         console = Console()
         console.print(tables)
+        input("Press any Key to Continue !!!\n")
     elif y==0:
 
         id = int(input("Enter the Id of Doctor to be Viewed: \n"))
