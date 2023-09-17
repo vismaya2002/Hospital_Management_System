@@ -77,22 +77,31 @@ def DeleteDetails(connection,cursor):
         for row in row:
             table.add_row(*row, style='magenta')
         console.print(table)
+        console.print("Departments can be Deleted only if there are NO Doctors in the Particular Department.",style='bold')
         id = int(input("Enter the Id of Department to be Deleted: \n"))
-        lst = []
-        cursor.execute('select * from department')
-        for j in cursor:
-            lst.append(j[0])
-        console.print("\n Deleting Department \n",style='bold')
-        if id not in lst:
+        if id not in datas:
             console.print("\n Sorry, enter a valid id \n",style='bold red')
             x = int(input("Press 1 to go back to main menu !!\n"))
             if x==1:
                 break
-            continue
-        cursor.execute('delete from department where deptid={}'.format(id))
-        connection.commit()
-        console.print("\nDeletion is Successfull\n",style='bold red')
-        break
+        dlist = []
+        cursor.execute("select * from doctor where exists(select * from department where doctor.deptid={})".format(id))
+        dataz = cursor.fetchall()
+        dlist.append(dataz)
+        if len(dlist)==0:
+            console.print("\n Deleting Department \n",style='bold')
+            cursor.execute('delete from department where deptid={}'.format(id))
+            connection.commit()
+            console.print("\nDeletion is Successfull\n",style='bold red')
+            break
+        else:
+            console.print("\n Sorry, Deletion is not Possible. Doctors are Present in this Department.\n",style='bold')
+            k = int(input("Press 1 to go back to main menu !!\n"))
+            if k==1:
+                break
+            
+        
+         
 
 def ViewDetails(connection,cursor):
     console.print("\nViewing the Department Details\n",style='bold')

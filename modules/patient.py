@@ -3,6 +3,7 @@ from rich.table import Table
 from rich.markdown import Markdown
 from rich import print
 from rich.style import Style
+from time import sleep
 
 console = Console()
 
@@ -97,15 +98,21 @@ def EditPatient(connection,cursor):
         table = Table(title="DEPARTMENTS")
         row = []
         cursor.execute("select * from patient where PatientId={}".format(id))
+        datas = cursor.fetchall()
+        console = Console()
+        if id not in datas:
+            console.print("\n Sorry, enter a valid id \n",style='bold red')
+            x = int(input("Press 1 to go back to main menu !!\n"))
+            if x==1:
+                break
         column = ["Patient Id","Patient Name","Age","Phone Number","Department Consulted","Doctor Consulted"]
-        for i in cursor:
+        for i in datas:
             temprow = [str(i[0]),i[1],str(i[2]),str(i[3]),str(i[4]),str(i[5])]
             row.append(temprow)
         for column in column:
             table.add_column(column,style="cyan")
         for row in row:
             table.add_row(*row, style='magenta')
-        console = Console()
         console.print(table)
         lst = []
         console.print("Edit The Details Of Patient...",style='bold')
@@ -113,13 +120,7 @@ def EditPatient(connection,cursor):
         for i in cursor:
             lst.append(i[0])
         #print(lst)    
-        if id not in lst:
-            console.print("Enter a Valid Patient Id",style='bold')
-            z = int(input("Press 1 to go back to main menu..."))
-            if z==1:
-                Patient(connection,cursor)
-            else:
-                break
+        
             
         Enter()
         tables = Table(title="EDITION MENU")
@@ -159,8 +160,16 @@ def DeletePatient(connection,cursor):
         table = Table(title="PATIENT DETAILS")
         row = []
         cursor.execute("select * from patient where PatientId={}".format(id))
+        dataz = cursor.fetchall()
+        if id not in dataz[0]:
+            print("\n[bold red] Enter a Valid Id [/bold red]\n")
+            x = int(input("Press 1 To Go Back To Main Menu !!!\n"))
+            if x==1:
+                break
+            continue
+
         column = ["Patient Id","Patient Name","Age","Phone Number","Department Consulted","Doctor Consulted"]
-        for i in cursor:
+        for i in dataz:
             temprow = [str(i[0]),i[1],str(i[2]),str(i[3]),str(i[4]),str(i[5])]
             row.append(temprow)
         for column in column:
@@ -173,21 +182,18 @@ def DeletePatient(connection,cursor):
         cursor.execute('select * from patient')
         for j in cursor:
             lst.append(j[0])
-        if id not in lst:
-            print("\n[bold red] Enter a Valid Id [/bold red]\n")
-            x = int(input("Press 1 To Go Back To Main Menu !!!\n"))
-            if x==1:
-                break
-            continue
-        x = int(input("Press 1 if you want to DELETE...Else Press Any Other Key.... \n"))
-        if x==1:
+        x = input("\nPress 1 if you want to DELETE... Else Press any other Key \n")
+        if x=='1':
             console.print("\n Deleting The Details Of The Patient... \n",style='bold')
+            sleep(2)
             cursor.execute("delete from patient where PatientId={}".format(id))
             connection.commit()
             console.print("\n Deletion Is Successful... \n",style='bold')   
+            sleep(2)
             break
         else:
             print("[bold red]Request Aborted.[/bold red]")
+            sleep(2)
             break
         
         
@@ -200,8 +206,10 @@ def ViewPatient(connection,cursor):
     for k in cursor:
         lst.append(k[0])
     console.print("Viewing the Details of Patient\n",style='bold')
+    sleep(2)
     if id not in lst:
         print(("[bold red]Sorry, enter a valid id[bold red]\n"))
+        sleep(2)
         return
     table = Table(title="PATIENT DETAILS")
     cursor.execute("select patient.PatientId,patient.name,patient.age,patient.phone_number,patient.department_id,doctor.doctorid,doctor.name from patient,doctor where patient.doctor_id=doctor.doctorid and PatientId={}".format(id))

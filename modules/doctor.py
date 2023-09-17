@@ -24,7 +24,7 @@ def InsertDoctor(connection,cursor):
     console.print(table)
     cursor.execute('select * from doctor')
     val = cursor.fetchall()
-    id = len(val)+10001    
+    id = len(val)+10001  
     name = input("Enter the Name of Doctor:  \n")
     age = int(input("Enter the Age of Doctor: \n"))
     deptid = int(input("Enter the Department Id of Doctor: \n"))
